@@ -8,6 +8,7 @@
     },
     "author": "Farmer Hackers",
     "dependencies": {
+        "dotenv": "^5.0.1",
         "express": "^4.15.2",
         "phaser-ce": "^2.8.3",
         "socket.io": "^1.7.3"

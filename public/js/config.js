@@ -4,5 +4,6 @@ const config = {
     localStorageName: 'GameProject',
     bounce: 0.1,
     gravity: 500,
-    id: Date.now()
+    id: Date.now(),
+    character: 1
 }

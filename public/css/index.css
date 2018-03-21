@@ -1,0 +1,94 @@
+body {
+    margin: 0 auto;
+    font-family: 'Press Start 2P', cursive;
+    box-sizing: border-box;
+}
+
+#form {
+    width: 600px;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.center-align {
+    text-align: center;
+}
+
+#form > div {
+    width: 100%;
+}
+
+.valign-wrapper{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+input, label, button, select, option * {
+    font-family: 'Press Start 2P', cursive;
+    border: none;
+    background-color: transparent;
+    color: black;
+    border-radius: 0;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: transparent;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: transparent;
+}
+
+button, input, select {
+    padding: 8px 15px;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
+}
+
+.w-33 {
+    box-sizing: border-box;
+    width: 33.33333333%;
+    float: left;
+    display: inline-block;
+}
+
+.s-padding {
+    box-sizing: border-box;
+    padding: 5px 10px;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2px;
+    clear: both;
+    content: "";
+    display: inline-block;
+}
+
+.bordered {
+  -webkit-box-shadow: 5px 0 black, -5px 0 black, 0 -5px black, 0 5px black;
+          box-shadow: 5px 0 black, -5px 0 black, 0 -5px black, 0 5px black;
+  margin: 5px auto;
+}
+
+.arrow {
+    transform: rotate(180);
+}

@@ -1,6 +1,8 @@
 class Game extends Phaser.State {
     init() {
         //game.stage.disableVisibilityChange = true
+        this.layers = {}
+        this.playerMap = {}
     }
 
     preload() {
@@ -9,22 +11,28 @@ class Game extends Phaser.State {
         game.load.tilemap('map', 'assets/map/example_map.json', null, Phaser.Tilemap.TILED_JSON)
 
         game.load.spritesheet('tileset', 'assets/map/tilesheet.png', 32, 32)
-        game.load.spritesheet('player','assets/sprites/characters.png', 32, 32)
+        for(var i = 1; i < 10; i++) {
+            game.load.spritesheet(`player${i}`,`assets/sprites/character${i}.png`, 32, 32)
+        }
     }
 
     create() {
         this.world.resize(2500, 1500)
-        this.playerMap = {}
+
+        /* NOT NECESSARY */
         const testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
         testKey.onDown.add(Client.sendTest, this)
+        /**/
+
         game.add.image(0, 0, 'bg')
+
         const map = game.add.tilemap('map')
         map.addTilesetImage('tilesheet', 'tileset')
-        this.layers = {}
         map.layers.map(m => this.layers[m.name] = map.createLayer(m.name))
         map.setCollisionBetween(1, 10000, true, this.layers['Collider'])
-        console.log(this.layers)
+
         this.layers['Collider'].renderable = false
+
         this.cursors = this.input.keyboard.createCursorKeys()
         this.cursors.up.onDown.add(this.getCoordinates, this)
         this.cursors.down.onDown.add(this.getCoordinates, this)
@@ -37,12 +45,14 @@ class Game extends Phaser.State {
 
         this.collider = game.add.group()
         this.collider.enableBody = true
+
         //this.collider = game.add.sprite(200, 200, 'Collider')
 
         Client.askNewPlayer()
     }
 
     update() {
+        /* CHECK MAP OBJECTS COLLISION */
         Object.keys(this.playerMap).forEach(key => {
             game.physics.arcade.collide(this.playerMap[key], this.layers['Collider'])
             if (key !== config.id) {
@@ -53,8 +63,6 @@ class Game extends Phaser.State {
     }
 
     getCoordinates(layer) {
-        console.log(layer)
-        console.log(this.playerMap[config.id])
         const player = this.playerMap[config.id]
         const infos = {
             velocityX: 0,
@@ -65,7 +73,6 @@ class Game extends Phaser.State {
         }
 
         if (layer.isDown) {
-            console.log()
             switch (layer.event.key) {
                 case CONSTANTES.ARROWDOWN:
                     infos.velocityY = 160
@@ -83,21 +90,20 @@ class Game extends Phaser.State {
 
             }
         }
-        console.log(infos)
         Client.sendClick(infos.x, infos.y, infos.velocityX, infos.velocityY, infos.direction)
     }
 
-    addNewPlayer(id, x, y, velocityX, velocityY, direction) {
-        this.playerMap[id] = game.add.sprite(x, y, 'player')
+    addNewPlayer(id, x, y, velocityX, velocityY, direction, char) {
+        this.playerMap[id] = game.add.sprite(x, y, `player${char}`)
         game.physics.enable(this.playerMap[id], Phaser.Physics.ARCADE)
         this.playerMap[id].body.immovable = true
         this.playerMap[id].body.collideWorldBounds = true
         this.playerMap[id].body.velocity.x = velocityX
         this.playerMap[id].body.velocity.y = velocityY
         this.playerMap[id].direction = direction
-        this.playerMap[id].animations.add(CONSTANTES.ARROWLEFT, [12, 13, 14, 13], 6, true)
-        this.playerMap[id].animations.add(CONSTANTES.ARROWRIGHT, [24, 25, 26, 25], 6, true)
-        this.playerMap[id].animations.add(CONSTANTES.ARROWUP, [36, 37, 38, 37], 6, true)
+        this.playerMap[id].animations.add(CONSTANTES.ARROWLEFT, [3, 4, 5, 4], 6, true)
+        this.playerMap[id].animations.add(CONSTANTES.ARROWRIGHT, [6, 7, 8, 7], 6, true)
+        this.playerMap[id].animations.add(CONSTANTES.ARROWUP, [9, 10, 11, 10], 6, true)
         this.playerMap[id].animations.add(CONSTANTES.ARROWDOWN, [0, 1, 2, 1], 6, true)
         if (id === config.id){
             game.camera.follow(this.playerMap[config.id])
@@ -108,7 +114,6 @@ class Game extends Phaser.State {
 
     movePlayer(id, x, y, velocityX, velocityY, direction) {
         //change mouvement engine to moveToXY function
-        console.log('movePlayer ', id, velocityX, velocityY, direction)
         this.playerMap[id].position.x = x
         this.playerMap[id].position.y = y
         this.playerMap[id].body.velocity.x = velocityX
@@ -134,4 +139,3 @@ class Game extends Phaser.State {
 }
 
 const GameState = new Game()
-console.log(GameState)
